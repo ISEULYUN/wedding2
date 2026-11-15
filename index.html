@@ -194,7 +194,247 @@
         </div>
       </div>
     </section>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모바일 청첩장 방명록</title>
+  <style>
+    /* 청첩장 분위기에 맞춘 미니멀 스타일 */
+    .guestbook-section {
+      max-width: 420px;
+      margin: 40px auto;
+      padding: 20px;
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      color: #333;
+      background-color: #faf9f6;
+      border-radius: 12px;
+    }
+    .guestbook-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #5c4b43;
+    }
+    .guestbook-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .form-row {
+      display: flex;
+      gap: 8px;
+    }
+    .guestbook-form input,
+    .guestbook-form textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e0dcd5;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+      box-sizing: border-box;
+    }
+    .guestbook-form textarea {
+      resize: none;
+      height: 80px;
+    }
+    .submit-btn {
+      padding: 12px;
+      background-color: #8c7365;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #735d51;
+    }
+    /* 방명록 리스트 스타일 */
+    .guestbook-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .guestbook-item {
+      background: #fff;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #eeeae3;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .item-author {
+      font-weight: 600;
+      font-size: 14px;
+      color: #4a3f3a;
+    }
+    .item-date {
+      font-size: 11px;
+      color: #999;
+      margin-left: 6px;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .item-content {
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
 
+<div class="guestbook-section">
+  <div class="guestbook-title">축하 메시지 남기기</div>
+  
+  <!-- 입력 폼 -->
+  <form class="guestbook-form" id="guestbookForm">
+    <div class="form-row">
+      <input type="text" id="author" placeholder="이름" required maxlength="10">
+      <input type="password" id="password" placeholder="비밀번호 (삭제용)" required maxlength="10">
+    </div>
+    <textarea id="message" placeholder="신랑, 신부에게 축하의 마음을 전해주세요." required maxlength="200"></textarea>
+    <button type="submit" class="submit-btn">축하 글 남기기</button>
+  </form>
+
+  <!-- 방명록 목록 -->
+  <div class="guestbook-list" id="guestbookList"></div>
+</div>
+
+<!-- Firebase SDK (최신 모듈 방식) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { 
+    getFirestore, collection, addDoc, onSnapshot, 
+    query, orderBy, deleteDoc, doc, serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // ★ 본인의 Firebase 콘솔에서 발급받은 설정값으로 변경하세요 ★
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Firebase 초기화
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const guestbookRef = collection(db, "guestbook");
+
+  const form = document.getElementById("guestbookForm");
+  const listEl = document.getElementById("guestbookList");
+
+  // 1. 방명록 등록하기
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const author = document.getElementById("author").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    if (!author || !password || !message) return;
+
+    try {
+      await addDoc(guestbookRef, {
+        author: author,
+        password: password, // 실제 서비스에선 해시 처리 권장
+        message: message,
+        createdAt: serverTimestamp()
+      });
+      form.reset();
+    } catch (error) {
+      alert("등록 중 오류가 발생했습니다.");
+      console.error(error);
+    }
+  });
+
+  // 2. 방명록 실시간 불러오기 (최신순 정렬)
+  const q = query(guestbookRef, orderBy("createdAt", "desc"));
+  onSnapshot(q, (snapshot) => {
+    listEl.innerHTML = "";
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const id = docSnap.id;
+
+      // 날짜 포맷팅
+      let dateStr = "";
+      if (data.createdAt) {
+        const d = data.createdAt.toDate();
+        dateStr = `${d.getMonth() + 1}.${d.getDate()}`;
+      }
+
+      const item = document.createElement("div");
+      item.className = "guestbook-item";
+      item.innerHTML = `
+        <div class="item-header">
+          <div>
+            <span class="item-author">${escapeHTML(data.author)}</span>
+            <span class="item-date">${dateStr}</span>
+          </div>
+          <button class="delete-btn" data-id="${id}" data-pw="${data.password}">삭제</button>
+        </div>
+        <div class="item-content">${escapeHTML(data.message)}</div>
+      `;
+      listEl.appendChild(item);
+    });
+  });
+
+  // 3. 방명록 삭제하기 (이벤트 위임)
+  listEl.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      const docId = e.target.getAttribute("data-id");
+      const originPw = e.target.getAttribute("data-pw");
+      const inputPw = prompt("작성 시 입력한 비밀번호를 입력하세요.");
+
+      if (inputPw === null) return;
+      if (inputPw === originPw) {
+        try {
+          await deleteDoc(doc(db, "guestbook", docId));
+          alert("삭제되었습니다.");
+        } catch (error) {
+          alert("삭제 실패");
+        }
+      } else {
+        alert("비밀번호가 일치하지 않습니다.");
+      }
+    }
+  });
+
+  // XSS(스크립트 삽입 공격) 방지용 이스케이프 함수
+  function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+      tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag])
+    );
+  }
+</script>
+
+</body>
+</html>
     <!-- ─── Footer ─── -->
     <footer class="footer">
       <p class="footer__text" id="footerText"></p>
