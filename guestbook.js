@@ -212,10 +212,14 @@ onAuthStateChanged(auth, (user) => {
     : "";
 });
 
-  // 관리자 상태에 맞게 목록 갱신
-  if (isAdmin) {
-    // Firestore 실시간 변경으로 목록도 갱신됩니다.
-    // 로그인 직후 새로고침하여 관리자 버튼을 표시합니다.
-    location.reload();
-  }
-);
+// 관리자 상태 확인
+onAuthStateChanged(auth, (user) => {
+  isAdmin = !!user && user.uid === ADMIN_UID;
+
+  loginBtn.hidden = isAdmin;
+  logoutBtn.hidden = !isAdmin;
+
+  adminStatus.textContent = isAdmin
+    ? "관리자 로그인 상태"
+    : "";
+});
