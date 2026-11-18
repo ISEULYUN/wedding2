@@ -66,7 +66,7 @@ const CONFIG = {
   // ── 마음 전하실 곳 ──
   accounts: {
     groom: [
-      { role: "신랑", name: "김희범", bank: "국민은행", number: "917702-01-177133" }
+      { role: "신랑", name: "김희범", bank: "국민은행", number: "917702-01-177133" },
       { role: "어머니", name: "이옥순", bank: "농협은행", number: "961-02-344291" }
     ],
     bride: [
