@@ -218,4 +218,4 @@ onAuthStateChanged(auth, (user) => {
     // 로그인 직후 새로고침하여 관리자 버튼을 표시합니다.
     location.reload();
   }
-});
+);
