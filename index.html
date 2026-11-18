@@ -195,6 +195,68 @@
       </div>
     </section>
 
+
+<!-- Guestbook Section -->
+<section class="section guestbook" id="guestbook">
+  <div class="section__inner">
+    <h2 class="section__title">Wedding Guestbook</h2>
+    <p class="guestbook__desc">
+      두 사람의 새로운 시작을 축복하는<br>
+      따뜻한 마음을 남겨주세요.
+    </p>
+
+    <form id="guestbookForm" class="guestbook__form">
+      <input
+        type="text"
+        id="guestName"
+        maxlength="20"
+        placeholder="이름"
+        required
+      >
+
+      <textarea
+        id="guestMessage"
+        maxlength="300"
+        placeholder="축하 메시지를 남겨주세요."
+        required
+      ></textarea>
+
+      <button type="submit" id="guestSubmit">
+        방명록 남기기
+      </button>
+    </form>
+
+    <div class="guestbook__header">
+      <h3>축하 메시지</h3>
+      <span id="guestCount">0개의 메시지</span>
+    </div>
+
+    <div id="guestbookList" class="guestbook__list">
+      <p class="guestbook__loading">방명록을 불러오는 중입니다.</p>
+    </div>
+
+    <button type="button" id="guestLoadMore"
+      class="guestbook__more" hidden>
+      더 보기
+    </button>
+
+    <!-- 관리자 로그인 -->
+    <div class="guestbook__admin">
+      <button type="button" id="adminLoginBtn">
+        관리자 로그인
+      </button>
+      <button type="button" id="adminLogoutBtn" hidden>
+        관리자 로그아웃
+      </button>
+      <span id="adminStatus"></span>
+    </div>
+  </div>
+</section>
+
+<!-- Firebase 방명록 -->
+<script type="module" src="guestbook.js"></script>
+
+
     <!-- ─── Footer ─── -->
     <footer class="footer">
       <p class="footer__text" id="footerText"></p>

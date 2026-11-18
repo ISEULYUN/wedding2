@@ -1158,3 +1158,158 @@ a {
     transform: none !important;
   }
 }
+
+
+/* Guestbook */
+.guestbook {
+  padding: 80px 20px;
+  background: #faf8f5;
+}
+
+.guestbook__desc {
+  text-align: center;
+  line-height: 2;
+  color: #8b8178;
+  font-size: 14px;
+  margin: 20px 0 35px;
+}
+
+.guestbook__form {
+  max-width: 500px;
+  margin: 0 auto 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guestbook__form input,
+.guestbook__form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  border: 1px solid #e5ded6;
+  background: #fff;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.guestbook__form textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.guestbook__form input:focus,
+.guestbook__form textarea:focus {
+  border-color: #a99580;
+}
+
+.guestbook__form button {
+  padding: 15px;
+  border: none;
+  background: #8b7865;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.guestbook__header {
+  max-width: 500px;
+  margin: 0 auto 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.guestbook__header h3 {
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.guestbook__header span {
+  font-size: 12px;
+  color: #999;
+}
+
+.guestbook__list {
+  max-width: 500px;
+  margin: auto;
+}
+
+.guestbook__item {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid #eee8e1;
+  border-radius: 4px;
+}
+
+.guestbook__item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.guestbook__item-name {
+  font-size: 14px;
+  color: #6d5c4c;
+  font-weight: 600;
+}
+
+.guestbook__item-date {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.guestbook__item-message {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #666;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.guestbook__delete {
+  margin-top: 12px;
+  border: none;
+  background: transparent;
+  color: #b66b6b;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.guestbook__more {
+  display: block;
+  margin: 25px auto;
+  padding: 12px 30px;
+  border: 1px solid #cfc2b5;
+  background: transparent;
+  color: #8b7865;
+  cursor: pointer;
+}
+
+.guestbook__admin {
+  margin-top: 35px;
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}
+
+.guestbook__admin button {
+  border: none;
+  background: transparent;
+  color: #999;
+  text-decoration: underline;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.guestbook__loading {
+  text-align: center;
+  color: #999;
+  padding: 25px;
+}
