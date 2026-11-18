@@ -24,12 +24,13 @@ import {
 
 // 1. Firebase 설정값 입력
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+   apiKey: "AIzaSyB4pen3nF0o7Q31LFLoJOzaxJhsnWwQqbA",
+  authDomain: "wedding-52de6.firebaseapp.com",
+  projectId: "wedding-52de6",
+  storageBucket: "wedding-52de6.firebasestorage.app",
+  messagingSenderId: "1072839288156",
+  appId: "1:1072839288156:web:e28a10d3803b0c7f590d99",
+  measurementId: "G-W1YF76ETDS"
 };
 
 // 2. 관리자 UID 입력
@@ -210,27 +211,6 @@ onAuthStateChanged(auth, (user) => {
     ? "관리자 로그인 상태"
     : "";
 });
-
-// 6. 관리자 로그아웃
-logoutBtn.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error(error);
-    alert("로그아웃에 실패했습니다.");
-  }
-});
-
-// 7. 관리자 상태 확인
-onAuthStateChanged(auth, (user) => {
-  isAdmin = !!user && user.uid === ADMIN_UID;
-
-  loginBtn.hidden = isAdmin;
-  logoutBtn.hidden = !isAdmin;
-
-  adminStatus.textContent = isAdmin
-    ? "관리자 로그인 상태"
-    : "";
 
   // 관리자 상태에 맞게 목록 갱신
   if (isAdmin) {
