@@ -38,7 +38,7 @@ const CONFIG = {
 
   wedding: {
     date: "2026-12-20",
-    time: "10:30",
+    time: "11:50",
     venue: "더빈컨밴션",
     hall: "파티오 하우스 1층",
     address: "청주시 흥덕구 강내면 학천길5",
